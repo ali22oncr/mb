@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFF6F4">
+<title>Para você 💌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Caveat:wght@500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  /* ======================================================
+     ✏️  PARA EDITAR CORES, é só trocar os valores aqui:
+     ====================================================== */
+  :root{
+    --paper: #FFF6F4;
+    --paper-card: #FFFDFB;
+    --rose: #D6536D;
+    --rose-soft: #F6C9D2;
+    --rose-deep: #B23A56;
+    --ink: #5B3A42;
+    --ink-soft: #8A6670;
+  }
+
+  *{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 14% 18%, #ffe1e9 0%, transparent 42%),
+      radial-gradient(circle at 86% 78%, #ffeef1 0%, transparent 48%),
+      var(--paper);
+    color: var(--ink);
+    font-family: 'Quicksand', sans-serif;
+    overflow-x: hidden;
+  }
+  h1,h2,p{ margin:0; }
+  button{ font: inherit; background:none; border:none; padding:0; color:inherit; cursor:pointer; }
+  button:focus-visible{ outline:2px solid var(--rose-deep); outline-offset:4px; border-radius:8px; }
+
+  .container{
+    width:min(92vw, 640px);
+    margin:0 auto;
+    padding: clamp(1.5rem,5vw,3rem) 0 clamp(3rem,8vw,5rem);
+    position:relative;
+    z-index:1;
+  }
+
+  /* ---------- pétalas ambiente ---------- */
+  .petalas{
+    position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:0;
+  }
+  .petala{
+    position:absolute; top:-8%;
+    width:10px; height:10px;
+    background: var(--rose-soft);
+    border-radius: 0 50% 50% 50%;
+    opacity:.65;
+    animation-name: cair;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+  }
+  @keyframes cair{
+    0%   { transform: translate(0,0) rotate(20deg); }
+    50%  { transform: translate(14px, 55vh) rotate(140deg); }
+    100% { transform: translate(-10px, 112vh) rotate(260deg); }
+  }
+
+  /* ---------- topo / textos comuns ---------- */
+  .eyebrow{
+    text-align:center; font-size:.78rem; letter-spacing:.14em; text-transform:uppercase;
+    color: var(--ink-soft); font-weight:600; margin-bottom:.6rem;
+  }
+  .titulo-principal{
+    text-align:center;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic; font-weight:600;
+    font-size: clamp(2.1rem, 7vw, 3rem);
+    color: var(--rose-deep);
+  }
+  .de-quem{
+    text-align:center; margin-top:.45rem;
+    font-size:.95rem; color: var(--ink-soft);
+  }
+  .sprig{ display:block; width:110px; height:auto; margin:2.2rem auto; color: var(--rose); opacity:.55; }
+
+  /* ---------- cena do envelope ---------- */
+  .hero{ transition: opacity .5s ease, transform .5s ease; }
+  .hero.saindo{ opacity:0; transform: translateY(-14px) scale(.97); pointer-events:none; }
+
+  .cena-envelope{
+    position:relative;
+    width: clamp(230px, 75vw, 320px);
+    aspect-ratio: 1.5;
+    margin: 2.2rem auto .9rem;
+  }
+  .envelope-corpo{
+    position:absolute; inset:0;
+    background: var(--paper-card);
+    border:1.5px solid var(--rose-soft);
+    border-radius:16px;
+    box-shadow: 0 18px 34px -18px rgba(91,58,66,.4), inset 0 2px 0 rgba(255,255,255,.7);
+    z-index:1;
+  }
+  .envelope-aba{
+    position:absolute; left:0; right:0; top:0; height:56%;
+    clip-path: polygon(0 0, 100% 0, 50% 88%);
+    background: linear-gradient(160deg, var(--rose-soft), #f3b3c1);
+    z-index:3;
+    transform-origin: top center;
+    transition: opacity .45s ease .1s, transform .45s ease .1s;
+  }
+  .carta-pico{
+    position:absolute; left:11%; right:11%; top:-22%; height:48%;
+    background: var(--paper-card);
+    border:1.5px solid var(--rose-soft);
+    border-radius:10px 10px 5px 5px;
+    box-shadow: 0 12px 26px -16px rgba(91,58,66,.45);
+    z-index:2;
+    display:flex; align-items:center; justify-content:center;
+    padding: 8px;
+    font-size:.78rem; color: var(--rose-deep); text-align:center;
+    opacity:0;
+    transform: translateY(42px) scale(.88);
+    transition: opacity .5s ease .22s, transform .55s cubic-bezier(.22,.9,.32,1.2) .22s;
+  }
+  .lacre{
+    position:absolute; top:47%; left:50%;
+    width: clamp(46px,14vw,58px); height: clamp(46px,14vw,58px);
+    transform: translate(-50%,-50%);
+    border-radius:50%;
+    background: radial-gradient(circle at 33% 28%, #ea7e93, var(--rose) 58%, var(--rose-deep) 100%);
+    box-shadow: 0 6px 14px -6px rgba(91,58,66,.55), inset 0 -3px 6px rgba(0,0,0,.18);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff2f4; font-size:1.15rem;
+    z-index:4;
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .envelope-hit{
+    position:absolute; inset:0; z-index:5;
+    border-radius:16px; cursor:pointer;
+  }
+
+  .cena-envelope.aberta .envelope-aba{ opacity:0; transform: translateY(-8px) scale(.92); }
+  .cena-envelope.aberta .carta-pico{ opacity:1; transform: translateY(0) scale(1); animation: flutuar 2.6s ease-in-out infinite; }
+  .cena-envelope.aberta .lacre{ opacity:0; transform: translate(-50%,-50%) scale(.5) rotate(12deg); }
+  @keyframes flutuar{ 50%{ transform: translateY(-5px) scale(1); } }
+
+  .dica{
+    text-align:center; font-size:.85rem; color: var(--ink-soft);
+  }
+  .seta{ display:inline-block; animation: balancar 1.6s ease-in-out infinite; }
+  @keyframes balancar{ 50%{ transform: translateY(4px); } }
+
+  /* ---------- carta completa ---------- */
+  .carta-secao{
+    opacity:0; transform: translateY(18px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .carta-secao.visivel{ opacity:1; transform:translateY(0); }
+  .papel-carta{
+    background: var(--paper-card);
+    border:1px solid var(--rose-soft);
+    border-radius:20px;
+    padding: clamp(1.6rem,6vw,2.6rem) clamp(1.3rem,6vw,2.3rem);
+    box-shadow: 0 22px 44px -26px rgba(91,58,66,.4);
+  }
+  .linha-carta{
+    opacity:0; transform: translateY(10px);
+    animation: surgir .6s ease forwards;
+    animation-delay: calc(var(--i) * .35s + .1s);
+    font-family:'Caveat', cursive;
+    font-size: clamp(1.2rem, 1.2rem + 1vw, 1.6rem);
+    line-height:1.5;
+    color: var(--ink);
+    margin: 0 0 .8rem;
+  }
+  .linha-carta.assinatura{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:1.25rem; color: var(--rose-deep); margin-top:1rem;
+  }
+  @keyframes surgir{ to{ opacity:1; transform:translateY(0); } }
+
+  /* ---------- bilhetes ---------- */
+  .bilhetes-secao{ text-align:center; margin-top: clamp(2.5rem,8vw,4rem); }
+  .bilhetes-secao h2{
+    font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:600;
+    font-size: clamp(1.6rem, 5vw, 2.1rem); color: var(--rose-deep);
+  }
+  .bilhetes-secao .sub{ font-size:.85rem; color: var(--ink-soft); margin-top:.4rem; }
+
+  .pilha-bilhetes{
+    position:relative;
+    width: clamp(230px,72vw,300px);
+    height: 170px;
+    margin: 2rem auto 1rem;
+  }
+  .bilhete-fundo{
+    position:absolute; inset:0; border-radius:16px;
+    background: var(--paper-card); border:1px solid var(--rose-soft);
+  }
+  .bilhete-fundo.b1{ transform: rotate(-7deg) translateY(5px); z-index:1; }
+  .bilhete-fundo.b2{ transform: rotate(5deg) translateY(3px); z-index:2; }
+
+  .bilhete-topo{
+    position:absolute; inset:0; z-index:3;
+    border-radius:16px;
+    background: var(--paper-card);
+    border:1.5px solid var(--rose);
+    display:flex; align-items:center; justify-content:center;
+    text-align:center; padding: 1.4rem;
+    font-family:'Caveat', cursive;
+    font-size: clamp(1.15rem, 4vw, 1.45rem);
+    color: var(--ink);
+    box-shadow: 0 16px 30px -20px rgba(91,58,66,.4);
+    transition: transform .5s ease;
+  }
+  .bilhete-topo.virando{ transform: rotateY(90deg); }
+
+  /* confete das pétalas ao puxar bilhete */
+  .petala-confete{
+    position:fixed; width:10px; height:10px;
+    background: var(--rose-soft);
+    border-radius: 0 50% 50% 50%;
+    transform: rotate(45deg);
+    pointer-events:none; z-index:50;
+    animation: voar .7s ease-out forwards;
+  }
+  @keyframes voar{ to{ transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity:0; } }
+
+  /* ---------- rodapé ---------- */
+  .rodape{ text-align:center; margin-top: clamp(3rem,9vw,4.5rem); font-size:.85rem; color: var(--ink-soft); }
+
+  /* só pra quem usa mouse: leve realce no toque do hit-area do envelope */
+  @media (hover:hover){
+    .envelope-hit:hover ~ .lacre{ transform: translate(-50%,-50%) scale(1.06); }
+  }
+
+  [hidden]{ display:none !important; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .petalas{ display:none; }
+    *, *::before, *::after{
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="petalas" id="petalas" aria-hidden="true"></div>
+
+<main class="container">
+
+  <section class="hero" id="hero">
+    <p class="eyebrow">uma poesia só pra você</p>
+    <h1 class="titulo-principal">Para, <span id="nomePara">meu amor</span></h1>
+    <p class="de-quem">de <span id="nomeDe">seu amor</span></p>
+
+    <div class="cena-envelope" id="cenaEnvelope">
+      <span class="envelope-corpo" aria-hidden="true"></span>
+      <span class="envelope-aba" aria-hidden="true"></span>
+      <span class="carta-pico" aria-hidden="true">ler carta&nbsp;→</span>
+      <span class="lacre" aria-hidden="true">♥</span>
+      <button class="envelope-hit" id="envelopeBtn" aria-label="Abrir envelope"></button>
+    </div>
+    <p class="dica"><span id="dicaTexto">toque para abrir</span> <span class="seta" aria-hidden="true">↓</span></p>
+  </section>
+
+  <section class="carta-secao" id="cartaSecao" hidden>
+    <div class="papel-carta" id="papelCarta"></div>
+  </section>
+
+  <svg class="sprig" viewBox="0 0 120 40" aria-hidden="true">
+    <path d="M5 30 Q 40 5, 115 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M35 18 q -8 -10 -18 -6 q 6 10 18 6 Z" fill="currentColor" opacity=".55"/>
+    <path d="M70 12 q -6 -12 -18 -10 q 4 11 18 10 Z" fill="currentColor" opacity=".55"/>
+    <circle cx="112" cy="9" r="2.4" fill="currentColor"/>
+    <circle cx="106" cy="6" r="2" fill="currentColor" opacity=".7"/>
+    <circle cx="108" cy="13" r="2" fill="currentColor" opacity=".7"/>
+  </svg>
+
+  <section class="bilhetes-secao" id="bilhetesSecao">
+    <h2>um bilhetinho pra você</h2>
+    <p class="sub">toque no bilhete para puxar outro</p>
+    <div class="pilha-bilhetes">
+      <div class="bilhete-fundo b1" aria-hidden="true"></div>
+      <div class="bilhete-fundo b2" aria-hidden="true"></div>
+      <button class="bilhete-topo" id="bilheteTopo" aria-live="polite">
+        <span id="bilheteTexto">toque para tirar um bilhete</span>
+      </button>
+    </div>
+  </section>
+
+  <svg class="sprig" viewBox="0 0 120 40" aria-hidden="true">
+    <path d="M5 30 Q 40 5, 115 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M35 18 q -8 -10 -18 -6 q 6 10 18 6 Z" fill="currentColor" opacity=".55"/>
+    <path d="M70 12 q -6 -12 -18 -10 q 4 11 18 10 Z" fill="currentColor" opacity=".55"/>
+    <circle cx="112" cy="9" r="2.4" fill="currentColor"/>
+    <circle cx="106" cy="6" r="2" fill="currentColor" opacity=".7"/>
+    <circle cx="108" cy="13" r="2" fill="currentColor" opacity=".7"/>
+  </svg>
+
+  <footer class="rodape">
+    <p>Eu te amo minha vida 🌷</p>
+  </footer>
+
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ======================================================
+     ✏️  EDITE AQUI: nomes, carta e bilhetinhos
+     ====================================================== */
+  const CONFIG = {
+    para: "meu amor",        // nome dela
+    de: "Alisson",          // seu nome
+
+    carta: [
+      "Nos seus olhos, descobri a razão para viver<br>Você é minha vida, meu tudo<br>Sem vc eu fico sem saber<br>O que fazer e como viver",
+      "Desde que eu te conheci<br>Minha vida ganhou sentido<br>Foi aí que percebi<br>O significado do amor",
+      "Cada partícula que compõe nosso ser<br>Viajou por bilhões de anos<br>Para que eu e você viesse a se ter<br>Dois mundos, um só,<br>E enquanto o universo seguir girando,<br>Estarei aqui, de mãos dadas contigo,<br>Todo dia te escolhendo, te amando,<br>Pois você é meu lar, meu abrigo"
+    ],
+    assinatura: "Eu te amo",
+
+    motivos: [
+      "Você é meu lugar favorito no mundo.",
+      "Em qualquer universo, eu escolheria você.",
+      "Meu dia sempre fica melhor quando tem você nele.",
+      "Seu sorriso é uma das minhas coisas favoritas.",
+      "Você é a melhor parte dos meus dias.",
+      "Eu amo a vida que tenho ao seu lado.",
+      "Se amar você é um sonho, não quero acordar.",
+      "Você é meu lar.",
+      "Você trouxe cor para uma vida que parecia preto e branco.",
+      "Você é a minha bússola e o meu porto seguro.",
+      "Meu futuro fica mais bonito quando imagino você nele."
+    ]
+  };
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.title = "Para, " + CONFIG.para + " 💌";
+  document.getElementById('nomePara').textContent = CONFIG.para;
+  document.getElementById('nomeDe').textContent = CONFIG.de;
+
+  /* ---------- pétalas ambiente ---------- */
+  function criarPetalas(){
+    if (prefersReduced) return;
+    const camada = document.getElementById('petalas');
+    const total = 13;
+    for (let i = 0; i < total; i++){
+      const p = document.createElement('span');
+      p.className = 'petala';
+      const tamanho = 7 + Math.random() * 7;
+      p.style.width = tamanho + 'px';
+      p.style.height = tamanho + 'px';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.opacity = (0.35 + Math.random() * 0.4).toFixed(2);
+      const duracao = 10 + Math.random() * 9;
+      p.style.animationDuration = duracao + 's';
+      p.style.animationDelay = (-Math.random() * duracao) + 's';
+      camada.appendChild(p);
+    }
+  }
+  criarPetalas();
+
+  /* ---------- envelope / carta ---------- */
+  const cenaEnvelope = document.getElementById('cenaEnvelope');
+  const envelopeBtn = document.getElementById('envelopeBtn');
+  const dicaTexto = document.getElementById('dicaTexto');
+  const heroSecao = document.getElementById('hero');
+  const cartaSecao = document.getElementById('cartaSecao');
+  const papelCarta = document.getElementById('papelCarta');
+
+  let estadoCarta = 'fechada';
+
+  function montarCarta(){
+    papelCarta.innerHTML = '';
+    CONFIG.carta.forEach(function(linha, i){
+      const p = document.createElement('p');
+      p.className = 'linha-carta';
+      p.style.setProperty('--i', i);
+      p.innerHTML = linha;
+      papelCarta.appendChild(p);
+    });
+    const assinatura = document.createElement('p');
+    assinatura.className = 'linha-carta assinatura';
+    assinatura.style.setProperty('--i', CONFIG.carta.length);
+    assinatura.textContent = CONFIG.assinatura + ', ' + CONFIG.de + '.';
+    papelCarta.appendChild(assinatura);
+  }
+  montarCarta();
+
+  envelopeBtn.addEventListener('click', function(){
+    if (estadoCarta === 'fechada'){
+      estadoCarta = 'aberta';
+      cenaEnvelope.classList.add('aberta');
+      dicaTexto.textContent = 'toque na carta para ler';
+      envelopeBtn.setAttribute('aria-label', 'Ler carta completa');
+    } else if (estadoCarta === 'aberta'){
+      estadoCarta = 'lida';
+      revelarCartaCompleta();
+    }
+  });
+
+  function revelarCartaCompleta(){
+    heroSecao.classList.add('saindo');
+    window.setTimeout(function(){
+      heroSecao.hidden = true;
+      cartaSecao.hidden = false;
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          cartaSecao.classList.add('visivel');
+        });
+      });
+      cartaSecao.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
+    }, prefersReduced ? 0 : 480);
+  }
+
+  /* ---------- bilhetes de amor ---------- */
+  const bilheteTopo = document.getElementById('bilheteTopo');
+  const bilheteTexto = document.getElementById('bilheteTexto');
+  let ultimoIndice = -1;
+  let primeiraVez = true;
+
+  function proximoMotivo(){
+    if (CONFIG.motivos.length === 1) return CONFIG.motivos[0];
+    let i;
+    do { i = Math.floor(Math.random() * CONFIG.motivos.length); } while (i === ultimoIndice);
+    ultimoIndice = i;
+    return CONFIG.motivos[i];
+  }
+
+  function estourarPetalas(origemEl){
+    if (prefersReduced) return;
+    const rect = origemEl.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    for (let i = 0; i < 7; i++){
+      const pet = document.createElement('span');
+      pet.className = 'petala-confete';
+      pet.style.left = cx + 'px';
+      pet.style.top = cy + 'px';
+      const angulo = Math.random() * Math.PI * 2;
+      const distancia = 45 + Math.random() * 55;
+      pet.style.setProperty('--dx', Math.cos(angulo) * distancia + 'px');
+      pet.style.setProperty('--dy', Math.sin(angulo) * distancia + 'px');
+      pet.style.setProperty('--rot', (Math.random() * 200 - 100) + 'deg');
+      document.body.appendChild(pet);
+      pet.addEventListener('animationend', function(){ pet.remove(); });
+    }
+  }
+
+  bilheteTopo.addEventListener('click', function(){
+    estourarPetalas(bilheteTopo);
+    if (prefersReduced){
+      bilheteTexto.textContent = proximoMotivo();
+      primeiraVez = false;
+      return;
+    }
+    bilheteTopo.classList.add('virando');
+    window.setTimeout(function(){
+      bilheteTexto.textContent = proximoMotivo();
+      bilheteTopo.classList.remove('virando');
+      primeiraVez = false;
+    }, 250);
+  });
+
+})();
+</script>
+</body>
+</html>
